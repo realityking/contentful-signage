@@ -7,13 +7,10 @@ var runApp = function() {
   if (chrome.power) {
     chrome.power.requestKeepAwake('display');
   }
-  console.log(config);
-  chrome.app.window.create(
-      config ?
-      'exported_app_view.html' :
-      'designer_view.html',
+  chrome.app.window.create('main.html',
       {
-        id: 'KioskDesignerWindow',
+        id: 'ContentfulSignageWindow',
+        state: 'fullscreen',
         width: 1100,
         height: 720,
         minWidth: 800,
