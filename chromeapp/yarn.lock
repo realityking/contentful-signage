@@ -1580,6 +1580,10 @@ cssom@0.3.x, "cssom@>= 0.3.0 < 0.4.0":
   dependencies:
     cssom "0.3.x"
 
+d3@^3.5.3:
+  version "3.5.17"
+  resolved "https://registry.yarnpkg.com/d3/-/d3-3.5.17.tgz#bc46748004378b21a360c9fc7cf5231790762fb8"
+
 d@^0.1.1, d@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/d/-/d-0.1.1.tgz#da184c535d18d8ee7ba2aa229b914009fae11309"
@@ -3905,6 +3909,12 @@ react-addons-transition-group@^15.4.2:
   dependencies:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
+
+react-d3-components@^0.6.5:
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/react-d3-components/-/react-d3-components-0.6.5.tgz#87b9bea1d1db542cee63691944edce298409ea03"
+  dependencies:
+    d3 "^3.5.3"
 
 react-deep-force-update@^1.0.0:
   version "1.0.1"

@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import MainSection from '../components/MainSection';
 import SideBar from '../components/SideBar';
@@ -64,6 +65,25 @@ function weatherAlertSlideFromEntry(entry) {
 	return weatherAlertSlide;
 }
 
+function teamStatsSlideDataFromEntries(entries) {
+	
+	var chartData = _.map(entries, function(entry) {
+		return {
+			label: entry.fields.teamName[locale],
+			values: [
+				{ x: "TODO", y: entry.fields.todo[locale] }, 
+				{ x: "In Progress", y: entry.fields.inProgress[locale] },
+				{ x: "Done", y: entry.fields.done[locale] }
+				]
+		};
+	});
+	var slide = {
+		type: 'TeamStatistics',
+		data: chartData
+	};
+	return slide;
+}
+
 function transformEntriesToSlides(entries) {
 	var slides = [];
 	for (var i = 0; i < entries.length; i++) {
@@ -80,19 +100,16 @@ function transformEntriesToSlides(entries) {
 			slides.push(jobBoardSlideFromEntry(entries[i]));
 			break;
 		default:
-			console.log("unhandled contentType");
+			break;
 		}
 	}
+	var teamStatsEntries = _.filter(entries, function(entry) {
+		return entry.sys.contentType.sys.id == "teamStats";
+	})
+	slides.push(teamStatsSlideDataFromEntries(teamStatsEntries));
+	
 	return slides;
 }
-
-
-// TODO:
-// function teamStatsFromEntries(entries) {
-// 	var stats = _.filter(entries, function(entry) {
-//
-// 	});
-// }
 
 export default class Root extends Component {
 	

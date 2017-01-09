@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import JobBoard from '../slides/JobBoard';
 import Tweet from '../slides/Tweet';
 import WeatherAlert from '../slides/WeatherAlert';
+import TeamStatistics from '../slides/TeamStatistics';
 
 export default class Slide extends Component {
   static propTypes = {
@@ -28,6 +29,14 @@ export default class Slide extends Component {
         <div className='slide'>
           <h1>Weather Alert</h1>
           <WeatherAlert data={data} />
+        </div>
+      )
+    }
+    if (this.props.type === 'TeamStatistics') {
+      return(
+        <div className='slide'>
+          <h1>Team Stats</h1>
+          <TeamStatistics data={data} />
         </div>
       )
     }
