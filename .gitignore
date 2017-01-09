@@ -1,3 +1,4 @@
+.DS_Store
 chromeapp/node_modules/
 chromeapp/build/
 chromeapp/dev/
