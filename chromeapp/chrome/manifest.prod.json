@@ -17,6 +17,7 @@
   },
   "kiosk_enabled": true,
   "permissions": [
+    "fullscreen",
     "webview",
     "power",
     "storage",

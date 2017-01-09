@@ -34,22 +34,12 @@ var runApp = function() {
     {
       id: 'ContentfulSignageWindow',
       state: 'fullscreen',
-      width: 1100,
+      width: 1280,
       height: 720,
-      minWidth: 800,
-      minHeight: 600
     },
     function(win) {
-      if (!this.X) { return; }
-      var window = win.contentWindow;
-      window.onload = function() {
-        this.$addWindow(window);
-        var Y = this.X.subWindow(window, 'Contentful Signage');
-        this.DOM.init(Y);
-      }.bind(this);
-      win.onClosed.addListener(function() {
-        this.$removeWindow(window);
-      }.bind(this));  
+      win.fullscreen();
+
     }.bind(this));
 
 	// Sync content via Contentful
