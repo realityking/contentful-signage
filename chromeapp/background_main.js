@@ -28,6 +28,11 @@ var runApp = function() {
           this.$removeWindow(window);
         }.bind(this));
       }.bind(this));
+	  
+	  window.setInterval(function() {
+	  	console.log("bang");
+	  }, 1000);
+	  
 }.bind(this);
 
 /**
@@ -39,7 +44,6 @@ var runApp = function() {
 chrome.app.runtime.onLaunched.addListener(function() {
   runApp();
 });
-
 
 /**
  * Listens for the app restarting then re-creates the window.
