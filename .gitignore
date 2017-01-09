@@ -1,3 +1,5 @@
 chromeapp/node_modules/
 chromeapp/build/
 chromeapp/dev/
+chromeapp/config.js
+

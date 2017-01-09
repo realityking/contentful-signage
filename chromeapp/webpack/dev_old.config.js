@@ -2,14 +2,28 @@ const path = require('path');
 const webpack = require('webpack');
 const postCSSConfig = require('./postcss.config');
 
+const host = 'localhost';
+const port = 3000;
 const customPath = path.join(__dirname, './customPublicPath');
+const hotScript = 'webpack-hot-middleware/client?path=__webpack_hmr&dynamicPublicPath=true';
 
-module.exports = {
+const baseDevConfig = () => ({
+  devtool: 'eval-cheap-module-source-map',
   entry: {
-    todoapp: [customPath, path.join(__dirname, '../chrome/extension/todoapp')],
-    background: [customPath, path.join(__dirname, '../chrome/extension/background')],
+    todoapp: [customPath, hotScript, path.join(__dirname, '../chrome/extension/todoapp')],
+    background: [customPath, hotScript, path.join(__dirname, '../chrome/extension/background')],
     background_main: [customPath, path.join(__dirname, '../chrome/extension/background_main')],
     signage_app: [customPath, path.join(__dirname, '../chrome/extension/signage_app')],
+  },
+  devMiddleware: {
+    publicPath: `http://${host}:${port}/js`,
+    stats: {
+      colors: true
+    },
+    noInfo: true
+  },
+  hotMiddleware: {
+    path: '/js/__webpack_hmr'
   },
   output: {
     path: path.join(__dirname, '../dev/js'),
@@ -20,10 +34,12 @@ module.exports = {
     return postCSSConfig;
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.IgnorePlugin(/[^/]+\/[\S]+.dev$/),
-    new webpack.optimize.DedupePlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
+    new webpack.IgnorePlugin(/[^/]+\/[\S]+.prod$/),
     new webpack.DefinePlugin({
+      __HOST__: `'${host}'`,
+      __PORT__: port,
       'process.env': {
         NODE_ENV: JSON.stringify('development')
       }
@@ -38,15 +54,21 @@ module.exports = {
       loader: 'babel',
       exclude: /node_modules/,
       query: {
-        presets: ['react-optimize']
+        presets: ['react-hmre']
       }
     }, {
       test: /\.css$/,
       loaders: [
         'style',
-        'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+        'css?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
         'postcss'
       ]
     }]
   }
-};
+});
+
+const appConfig = baseDevConfig();
+
+module.exports = [
+  appConfig
+];

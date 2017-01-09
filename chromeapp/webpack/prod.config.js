@@ -9,6 +9,7 @@ module.exports = {
     todoapp: [customPath, path.join(__dirname, '../chrome/extension/todoapp')],
     background: [customPath, path.join(__dirname, '../chrome/extension/background')],
     background_main: [customPath, path.join(__dirname, '../chrome/extension/background_main')],
+    signage_app: [customPath, path.join(__dirname, '../chrome/extension/signage_app')],
   },
   output: {
     path: path.join(__dirname, '../build/js'),
@@ -22,12 +23,12 @@ module.exports = {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.IgnorePlugin(/[^/]+\/[\S]+.dev$/),
     new webpack.optimize.DedupePlugin(),
-/*    new webpack.optimize.UglifyJsPlugin({
+    new webpack.optimize.UglifyJsPlugin({
       comments: false,
       compressor: {
         warnings: false
       }
-    }), */
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production')
