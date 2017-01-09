@@ -29,6 +29,25 @@ export default class Root extends Component {
           text: "@contentful it's a secret 😜, but maybe soonish",
           date: '2017-01-09T14:24:00'
         }
+      },
+      {
+        type: 'WeatherAlert',
+        data: {
+          name: 'Berlin - 2017-01-07T09:00:00',
+          headline: 'Amtliche WARNUNG vor FROST',
+          event: 'FROST',
+          description: 'Es tritt mäßiger Frost zwischen -2 °C und -7 °C auf.',
+          state: "Berlin",
+          stateShort: 'BL',
+          regionName: "Berlin",
+          instruction: "",
+          start: "2017-01-09T14:24:00",
+          end: "2017-01-09T14:24:00",
+          type: 5,
+          level: 2,
+          altitudeStart: null,
+          altitudeEnd: null
+        }
       }
     ];
 
