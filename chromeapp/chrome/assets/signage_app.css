@@ -1,5 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,700,900);
 
+html {
+    font-size: 50px;
+}
+
 #app {
     display: flex;
     height: 100vh;
@@ -29,15 +33,19 @@
 }
 
 .time {
-    font-size: 80px;
+    font-size: 2em;
     position: relative;
     display: block;
     margin-top: 45px;
 }
 
 .date {
-    font-size: 40px;
+    font-size: 0.8em;
     position: relative;
     display: block;
     margin-top: 45px;
+}
+
+.slideJobBoard {
+    margin-left: 0.5em;
 }

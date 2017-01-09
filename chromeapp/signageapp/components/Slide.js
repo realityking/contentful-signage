@@ -13,20 +13,20 @@ export default class Slide extends Component {
   render() {
     var data = this.props.data;
     if (this.props.type === 'JobBoard') {
-      return(<div className="slide">
+      return(<div className="slide slideJobBoard">
         <JobBoard data={data}/>
       </div>)
     }
     if (this.props.type === 'Tweet') {
       return(
-        <div className='slide'>
+        <div className='slide slideTweet'>
           <Tweet data={data} />
         </div>
       )
     }
     if (this.props.type === 'WeatherAlert') {
       return(
-        <div className='slide'>
+        <div className='slide slideWeatherAlert'>
           <h1>Weather Alert</h1>
           <WeatherAlert data={data} />
         </div>
