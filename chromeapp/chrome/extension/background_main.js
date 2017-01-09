@@ -16,7 +16,7 @@ var runApp = function() {
       height: 720,
     },
     function(win) {
-      win.fullscreen();
+      // win.fullscreen();
 
     }.bind(this));
 }.bind(this);
