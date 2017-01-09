@@ -145,7 +145,6 @@ export default class Root extends Component {
 			if (entries == null) {
 				return;
 			}
-			console.log(entries);
 			this.setState({
 				slides: transformEntriesToSlides(entries)
 			});
@@ -153,13 +152,9 @@ export default class Root extends Component {
 	}
 	
   render() {
-
-	  console.log();
-	  var slides = this.state.slides;
-
     return (
       <div id="app">
-        <MainSection slides={slides} />
+        <MainSection slides={this.state.slides} />
         <SideBar />
       </div>
     );
