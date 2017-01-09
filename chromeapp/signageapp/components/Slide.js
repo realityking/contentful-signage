@@ -13,7 +13,7 @@ export default class Slide extends Component {
     var data = this.props.data;
     if (this.props.type === 'JobBoard') {
       return(<div className="slide">
-        <h1>{data.office}</h1>
+        <JobBoard data={data}/>
       </div>)
     }
     if (this.props.type === 'Tweet') {
