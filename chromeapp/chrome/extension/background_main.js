@@ -1,3 +1,26 @@
+
+var contentful = require('contentful');
+
+var fetchEntry = function() {
+
+ 
+  var client = contentful.createClient({
+	  space: 'wo8ajfmrrki1',
+	  accessToken: '655151496bd45f257be01b2488fde49dfc379f36d6a7fddd082453d5976927f4'
+  });
+  client.getEntry('1OXEx1Eaz6IwGyIkQeAW44')
+  .then((entry) => console.log(entry));
+}
+
+var syncContentfulWithRepeatDelay = function(seconds) {
+	// Do once, then...
+	fetchEntry();
+	// Repeat after delay.
+	window.setInterval(function() {
+		fetchEntry();
+	}, 1000 * seconds);
+}
+
 /**
  * Creates the window for the application.
  *
@@ -26,8 +49,11 @@ var runApp = function() {
       }.bind(this);
       win.onClosed.addListener(function() {
         this.$removeWindow(window);
-      }.bind(this));
+      }.bind(this));  
     }.bind(this));
+
+	// Sync content via Contentful
+	syncContentfulWithRepeatDelay(4);
 }.bind(this);
 
 /**
