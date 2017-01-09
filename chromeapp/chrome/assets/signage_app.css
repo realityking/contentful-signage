@@ -46,6 +46,29 @@ html {
     margin-top: 45px;
 }
 
-.slideJobBoard {
-    margin-left: 0.5em;
+.cloudWrapper {
+    text-align: center;
+    padding: 20px;
 }
+
+.slideJobBoard h1,
+.slideJobBoard h2 {
+    margin-left: 0.5em;
+    color: white;
+}
+
+.slideJobBoard .berlin,
+.slideJobBoard .san-francisco {
+    height: 100vh;
+    background-size: cover;
+    margin-top: -50px;
+}
+/*
+.slideJobBoard .berlin {
+    background-image: url("berlin.jpg")
+}
+
+.slideJobBoard .san-francisco {
+    background-image: url("san-francisco.jpg")
+}
+*/
