@@ -1,12 +1,12 @@
 
 var contentful = require('contentful');
+var config = require('../../config.js')
 
 var fetchEntry = function() {
 
- 
   var client = contentful.createClient({
-	  space: 'wo8ajfmrrki1',
-	  accessToken: '655151496bd45f257be01b2488fde49dfc379f36d6a7fddd082453d5976927f4'
+	  space: config.spaceId,
+	  accessToken: config.cdaAccessToken
   });
   client.getEntry('1OXEx1Eaz6IwGyIkQeAW44')
   .then((entry) => console.log(entry));
