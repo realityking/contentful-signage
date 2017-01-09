@@ -1,7 +1,4 @@
 
-var contentful_cda_client = require('./contentful_cda_client')
-// import { syncContentfulWithRepeatDelay } from './contentful_cda_client';
-
 /**
  * Creates the window for the application.
  *
@@ -22,18 +19,6 @@ var runApp = function() {
       win.fullscreen();
 
     }.bind(this));
-
-	// Example usage.
-	// // Sync content via Contentful
-	// // Repeat after delay.
-	// window.setInterval(function() {
-	//
-	// 	contentful_cda_client.syncContentful().then( (entries) => {
-	// 		console.log(entries);
-	// 	});
-	//
-	// }, 1000 * 4);
-
 }.bind(this);
 
 /**
