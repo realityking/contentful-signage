@@ -4,7 +4,22 @@ import SideBar from '../components/SideBar';
 
 export default class Root extends Component {
   render() {
-    var slides = [1, 2, 3, 4, 5];
+    var slides = [
+      {
+        type: 'JobBoard',
+        data: {
+          office: 'Berlin',
+          jobs: ['Engineering Manager', 'PHP Ecosystem Developer', 'Senior Controller', 'Product Designer', 'Product Marketing Manager']
+        }
+      },
+      {
+        type: 'JobBoard',
+        data: {
+          office: 'San Francisco',
+          jobs: ['Sales Engineer', 'Director of Developer Evangelism', 'Product Marketing Manager']
+        }
+      }
+    ];
 
     return (
       <div id="app">
