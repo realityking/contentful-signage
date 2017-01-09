@@ -2,6 +2,7 @@ import os
 import requests
 import time
 import twitter
+from hashlib import md5
 from email.utils import parsedate
 from datetime import datetime
 from flask import Flask, Response
@@ -35,15 +36,43 @@ def twitter_search(term):
         result_type='recent'
     )
 
+def fetch_management_entry(space_id, entry_id):
+    headers = {
+        'Authorization': 'Bearer {0}'.format(CONTENTFUL_MANAGEMENT_TOKEN),
+        'Content-Type': 'application/vnd.contentful.management.v1+json',
+    }
+
+    result = requests.get(
+        'https://api.contentful.com/spaces/{0}/entries'.format(space_id),
+        params={'sys.id': entry_id},
+        headers=headers
+    ).json()
+
+    if result['items']:
+        return result['items'][0]
+
 def create_management_entry(space_id, content_type_id, entry_id, data):
+    headers = {
+        'Authorization': 'Bearer {0}'.format(CONTENTFUL_MANAGEMENT_TOKEN),
+        'Content-Type': 'application/vnd.contentful.management.v1+json',
+        'X-Contentful-Content-Type': content_type_id
+    }
+
+    entry = fetch_management_entry(
+        space_id,
+        entry_id
+    )
+
+    if entry:
+        entry['fields'] = data
+        headers['X-Contentful-Version'] = str(entry['sys']['version'])
+    else:
+        entry = {'fields': data}
+
     return requests.put(
         'https://api.contentful.com/spaces/{0}/entries/{1}'.format(space_id, entry_id),
-        json={'fields': data},
-        headers={
-            'Authorization': 'Bearer {0}'.format(CONTENTFUL_MANAGEMENT_TOKEN),
-            'Content-Type': 'application/vnd.contentful.management.v1+json',
-            'X-Contentful-Content-Type': content_type_id
-        }
+        json=entry,
+        headers=headers
     ).json()
 
 
@@ -136,7 +165,7 @@ def tweet(term):
         entry = create_management_entry(
             SIGNAGE_SPACE_ID,
             TWEET_CONTENT_TYPE,
-            'latest_tweet_{0}'.format(hash(term)),
+            'latest_tweet_{0}'.format(md5(term.encode('utf-8')).hexdigest()),
             localize_values(tweet_data)
         )
         entry = publish_management_entry(
