@@ -75,7 +75,6 @@ def create_management_entry(space_id, content_type_id, entry_id, data):
         headers=headers
     ).json()
 
-
 def publish_management_entry(space_id, entry):
     entry_id = entry['sys']['id']
     return requests.put(
@@ -87,6 +86,70 @@ def publish_management_entry(space_id, entry):
         }
     ).json()
 
+def fetch_management_asset(space_id, asset_id):
+    headers = {
+        'Authorization': 'Bearer {0}'.format(CONTENTFUL_MANAGEMENT_TOKEN),
+        'Content-Type': 'application/vnd.contentful.management.v1+json',
+    }
+
+    result = requests.get(
+        'https://api.contentful.com/spaces/{0}/assets/{1}'.format(space_id, asset_id),
+        headers=headers
+    ).json()
+
+    if result.get('sys', {}).get('type', '') != 'Error':
+        return result
+
+def create_management_asset(space_id, asset_id, data):
+    headers = {
+        'Authorization': 'Bearer {0}'.format(CONTENTFUL_MANAGEMENT_TOKEN),
+        'Content-Type': 'application/vnd.contentful.management.v1+json'
+    }
+
+    asset = fetch_management_asset(
+        space_id,
+        asset_id
+    )
+
+    if asset:
+        headers['X-Contentful-Version'] = str(asset['sys']['version'])
+        asset['fields'] = data['fields']
+    else:
+        asset = data
+
+    return requests.put(
+        'https://api.contentful.com/spaces/{0}/assets/{1}'.format(space_id, asset_id),
+        json=asset,
+        headers=headers
+    ).json()
+
+def process_management_asset(space_id, asset):
+    asset_id = asset['sys']['id']
+    requests.put(
+        'https://api.contentful.com/spaces/{0}/assets/{1}/files/en-US/process'.format(space_id, asset_id),
+        headers={
+            'Authorization': 'Bearer {0}'.format(CONTENTFUL_MANAGEMENT_TOKEN),
+            'Content-Type': 'application/vnd.contentful.management.v1+json',
+            'X-Contentful-Version': str(asset['sys']['version'])
+        }
+    )
+
+    time.sleep(1)
+    return fetch_management_asset(
+        space_id,
+        asset_id
+    )
+
+def publish_management_asset(space_id, asset):
+    asset_id = asset['sys']['id']
+    return requests.put(
+        'https://api.contentful.com/spaces/{0}/assets/{1}/published'.format(space_id, asset_id),
+        headers={
+            'Authorization': 'Bearer {0}'.format(CONTENTFUL_MANAGEMENT_TOKEN),
+            'Content-Type': 'application/vnd.contentful.management.v1+json',
+            'X-Contentful-Version': str(asset['sys']['version'])
+        }
+    ).json()
 
 def localize_values(json_object, locale='en-US'):
     result = {}
@@ -110,6 +173,33 @@ def fix_weather_event(weather_event):
         weather_event[k] = datetime.fromtimestamp(fixed_timestamp).isoformat()
     weather_event['name'] = '{0} - {1}'.format(weather_event['regionName'], weather_event['start'])
     return weather_event
+
+
+def create_asset_from_tweet(tweet):
+    asset_data = {
+        'fields': {
+            'title': {'en-US': "{0} Avatar".format(tweet['userId'])},
+            'file': {
+                'en-US': {
+                    'contentType': 'image/jpeg',
+                    'fileName': "{0}.jpg".format(tweet['userId']),
+                    'upload': tweet['userProfilePic']
+                }
+            }
+        }
+    }
+
+    asset = create_management_asset(SIGNAGE_SPACE_ID, tweet['userId'], asset_data)
+    asset = process_management_asset(SIGNAGE_SPACE_ID, asset)
+    asset = publish_management_asset(SIGNAGE_SPACE_ID, asset)
+
+    return {
+        'sys': {
+            'type': 'Link',
+            'linkType': 'Asset',
+            'id': asset['sys']['id']
+        }
+    }
 
 
 app = Flask(__name__)
@@ -162,6 +252,10 @@ def tweet(term):
             'text': status.text,
             'date': datetime(*parsedate(status.created_at)[:-2]).isoformat()
         }
+
+        asset = create_asset_from_tweet(tweet_data)
+        tweet_data['userProfilePic'] = asset
+
         entry = create_management_entry(
             SIGNAGE_SPACE_ID,
             TWEET_CONTENT_TYPE,
@@ -178,4 +272,4 @@ def tweet(term):
 
 
 if __name__ == '__main__':
-    app.run(use_reloader=True)
+    app.run(debug=True, use_reloader=True)
