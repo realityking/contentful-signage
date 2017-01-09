@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Slider from 'react-slick';
+import Slide from './Slide';
 
 export default class MainSection extends Component {
   static propTypes = {
@@ -23,8 +24,8 @@ export default class MainSection extends Component {
     return(<div id="mainSection">
       <div style={{width: '100%'}}>
         <Slider {...settings}>
-          {this.props.slides.map(function(number) {
-            return <div><h3 style={{fontSize: '20em'}}>{number}</h3></div>;
+          {this.props.slides.map(function(slide) {
+            return <div><Slide type={slide.type} data={slide.data}/></div>;
           })}
         </Slider>
       </div>
