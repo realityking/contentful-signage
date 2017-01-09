@@ -1,8 +1,7 @@
 
 
-var contentful = require('contentful');
-var config = require('../../config.js');
-
+import contentful from 'contentful';
+import config from '../../config.js';
 import _ from 'lodash';
 
 var client = contentful.createClient({
