@@ -57,13 +57,13 @@ function handleResponse(response) {
 
 function initialSync() {
 		
-    client.sync({initial: true})
-    .then(handleInitialResponse);
+	return client.sync({initial: true})
+	.then(handleInitialResponse);
 }
 
 function nextSync() {
 	
-	client.sync({ nextSyncToken: getSyncToken() })
+	return client.sync({ nextSyncToken: getSyncToken() })
 	.then(handleResponse);
 }
 
@@ -100,15 +100,16 @@ function testMergeArrays() {
 	console.log("End test script");
 }
 
+var hasDoneInitialSync = false;
 
-function syncContentfulWithRepeatDelay(seconds) {
-
-	// Do initial sync
-	initialSync();
-	// Repeat after delay.
-	window.setInterval(function() {
-		nextSync();
-	}, 1000 * seconds);
+function syncContentful() {
+	if (!hasDoneInitialSync) {
+		// Do initial sync
+		hasDoneInitialSync = true;
+		return initialSync();
+	} else {
+		return nextSync();
+	}
 }
 
-export { syncContentfulWithRepeatDelay }
+export { syncContentful }
