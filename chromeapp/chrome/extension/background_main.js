@@ -23,8 +23,17 @@ var runApp = function() {
 
     }.bind(this));
 
-	// Sync content via Contentful
-	contentful_cda_client.syncContentfulWithRepeatDelay(20);
+	// Example usage.
+	// // Sync content via Contentful
+	// // Repeat after delay.
+	// window.setInterval(function() {
+	//
+	// 	contentful_cda_client.syncContentful().then( (entries) => {
+	// 		console.log(entries);
+	// 	});
+	//
+	// }, 1000 * 4);
+
 }.bind(this);
 
 /**
