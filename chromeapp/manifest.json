@@ -26,7 +26,6 @@
       "scripts": [
         "js/foam.js",
         "js/cab.js",
-        "config.js",
         "background_main.js"
       ]
     }
