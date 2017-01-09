@@ -69,7 +69,7 @@ def alive():
     return "I'm alive"
 
 @app.route('/weather/<city>')
-def berlin_weather(city):
+def weather(city):
     response = requests.get('http://www.dwd.de/DWD/warnungen/warnapp/json/warnings.json', headers={'User-Agent': 'Mozilla/5.0'})
     response_json = json.loads(response.text.split('warnWetter.loadWarnings(')[1][:-2])
     results = []
@@ -96,13 +96,6 @@ def berlin_weather(city):
         results.append(entry)
         time.sleep(0.1)
     return json_response({"results": results})
-
-@app.route('/receive', methods=['POST'])
-def receive():
-    try:
-        return json_response(request.get_json())
-    except:
-        return json_response({"error": "unparsable_json"}, status=400)
 
 
 if __name__ == '__main__':
