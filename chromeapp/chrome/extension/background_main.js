@@ -1,25 +1,6 @@
 
-var contentful = require('contentful');
-var config = require('../../config.js')
-
-var fetchEntry = function() {
-
-  var client = contentful.createClient({
-	  space: config.spaceId,
-	  accessToken: config.cdaAccessToken
-  });
-  client.getEntry('1OXEx1Eaz6IwGyIkQeAW44')
-  .then((entry) => console.log(entry));
-}
-
-var syncContentfulWithRepeatDelay = function(seconds) {
-	// Do once, then...
-	fetchEntry();
-	// Repeat after delay.
-	window.setInterval(function() {
-		fetchEntry();
-	}, 1000 * seconds);
-}
+var contentful_cda_client = require('./contentful_cda_client')
+// import { syncContentfulWithRepeatDelay } from './contentful_cda_client';
 
 /**
  * Creates the window for the application.
@@ -43,7 +24,7 @@ var runApp = function() {
     }.bind(this));
 
 	// Sync content via Contentful
-	syncContentfulWithRepeatDelay(4);
+	contentful_cda_client.syncContentfulWithRepeatDelay(20);
 }.bind(this);
 
 /**
