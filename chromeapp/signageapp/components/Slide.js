@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import JobBoard from '../slides/JobBoard';
+import Tweet from '../slides/Tweet';
 
 export default class Slide extends Component {
   static propTypes = {
@@ -13,6 +14,14 @@ export default class Slide extends Component {
       return(<div className="slide">
         <h1>{data.office}</h1>
       </div>)
+    }
+    if (this.props.type === 'Tweet') {
+      return(
+        <div className='slide'>
+          <h1>{data.name}</h1>
+          <Tweet data={data} />
+        </div>
+      )
     }
 
     // Render nothing if we don't know the type
