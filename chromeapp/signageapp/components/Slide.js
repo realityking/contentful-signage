@@ -19,7 +19,6 @@ export default class Slide extends Component {
     if (this.props.type === 'Tweet') {
       return(
         <div className='slide'>
-          <h1>{data.name}</h1>
           <Tweet data={data} />
         </div>
       )
