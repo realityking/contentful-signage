@@ -1,8 +1,10 @@
 import os
 import requests
 import time
+import twitter
+from email.utils import parsedate
 from datetime import datetime
-from flask import Flask, request, Response
+from flask import Flask, Response
 try:
     import simplejson as json
 except ImportError:
@@ -11,8 +13,27 @@ except ImportError:
 
 SIGNAGE_SPACE_ID = 'wo8ajfmrrki1'
 WEATHER_CONTENT_TYPE = 'weatherAlert'
+TWEET_CONTENT_TYPE = 'tweet'
 
 CONTENTFUL_MANAGEMENT_TOKEN = os.environ['CONTENTFUL_MANAGEMENT_TOKEN']
+TWITTER_ACCESS_TOKEN = os.environ['TWITTER_ACCESS_TOKEN']
+TWITTER_ACCESS_TOKEN_SECRET = os.environ['TWITTER_ACCESS_TOKEN_SECRET']
+TWITTER_CONSUMER_TOKEN = os.environ['TWITTER_CONSUMER_TOKEN']
+TWITTER_CONSUMER_SECRET = os.environ['TWITTER_CONSUMER_SECRET']
+
+def twitter_search(term):
+    twitter_api = twitter.Api(
+        consumer_key=TWITTER_CONSUMER_TOKEN,
+        consumer_secret=TWITTER_CONSUMER_SECRET,
+        access_token_key=TWITTER_ACCESS_TOKEN,
+        access_token_secret=TWITTER_ACCESS_TOKEN_SECRET
+    )
+
+    return twitter_api.GetSearch(
+        term=term,
+        count=1,
+        result_type='recent'
+    )
 
 def create_management_entry(space_id, content_type_id, entry_id, data):
     return requests.put(
@@ -95,6 +116,35 @@ def weather(city):
         )
         results.append(entry)
         time.sleep(0.1)
+    return json_response({"results": results})
+
+@app.route('/twitter/<term>')
+def tweet(term):
+    results = []
+    search_result = twitter_search(term)
+
+    if search_result:
+        status = search_result[0]
+        tweet_data = {
+            'name': 'Latest Tweet for {0}'.format(term),
+            'userId': status.user.screen_name,
+            'userName': status.user.name,
+            'userProfilePic': status.user.profile_image_url,
+            'text': status.text,
+            'date': datetime(*parsedate(status.created_at)[:-2]).isoformat()
+        }
+        entry = create_management_entry(
+            SIGNAGE_SPACE_ID,
+            TWEET_CONTENT_TYPE,
+            'latest_tweet_{0}'.format(hash(term)),
+            localize_values(tweet_data)
+        )
+        entry = publish_management_entry(
+            SIGNAGE_SPACE_ID,
+            entry
+        )
+        results.append(entry)
+
     return json_response({"results": results})
 
 
